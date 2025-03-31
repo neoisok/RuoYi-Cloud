@@ -5,7 +5,7 @@ import Layout from '@/layout/index'
 import ParentView from '@/components/ParentView'
 import InnerLink from '@/layout/components/InnerLink'
 
-const permission = {
+const permission = { // 定义一个名为permission的vuex模块
   state: {
     routes: [],
     addRoutes: [],
@@ -14,17 +14,17 @@ const permission = {
     sidebarRouters: []
   },
   mutations: {
-    SET_ROUTES: (state, routes) => {
+    SET_ROUTES: (state, routes) => { // 设置路由 
       state.addRoutes = routes
       state.routes = constantRoutes.concat(routes)
     },
-    SET_DEFAULT_ROUTES: (state, routes) => {
+    SET_DEFAULT_ROUTES: (state, routes) => { // 设置默认路由
       state.defaultRoutes = constantRoutes.concat(routes)
     },
-    SET_TOPBAR_ROUTES: (state, routes) => {
+    SET_TOPBAR_ROUTES: (state, routes) => { // 设置顶部路由
       state.topbarRouters = routes
     },
-    SET_SIDEBAR_ROUTERS: (state, routes) => {
+    SET_SIDEBAR_ROUTERS: (state, routes) => { // 设置侧边栏路由
       state.sidebarRouters = routes
     },
   },

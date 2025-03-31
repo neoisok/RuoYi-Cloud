@@ -2,7 +2,7 @@ const state = {
   dict: new Array()
 }
 const mutations = {
-  SET_DICT: (state, { key, value }) => {
+  SET_DICT: (state, { key, value }) => { // 设置字典
     if (key !== null && key !== "") {
       state.dict.push({
         key: key,
@@ -10,7 +10,7 @@ const mutations = {
       })
     }
   },
-  REMOVE_DICT: (state, key) => {
+  REMOVE_DICT: (state, key) => { // 删除字典
     try {
       for (let i = 0; i < state.dict.length; i++) {
         if (state.dict[i].key == key) {
@@ -21,7 +21,7 @@ const mutations = {
     } catch (e) {
     }
   },
-  CLEAN_DICT: (state) => {
+  CLEAN_DICT: (state) => { // 清空字典
     state.dict = new Array()
   }
 }

@@ -15,8 +15,8 @@ const state = {
   dynamicTitle: storageSetting.dynamicTitle === undefined ? dynamicTitle : storageSetting.dynamicTitle
 }
 const mutations = {
-  CHANGE_SETTING: (state, { key, value }) => {
-    if (state.hasOwnProperty(key)) {
+  CHANGE_SETTING: (state, { key, value }) => {// 修改设置
+    if (state.hasOwnProperty(key)) {// 判断state中是否有key属性
       state[key] = value
     }
   }

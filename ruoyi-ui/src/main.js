@@ -1,15 +1,18 @@
-import Vue from 'vue'
+import Vue from 'vue' // 引入 Vue
 
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie' // 引入 Cookies
 
 import Element from 'element-ui'
-import './assets/styles/element-variables.scss'
+import './assets/styles/element-variables.scss' // 引入 element-ui 样式
 
-import '@/assets/styles/index.scss' // global css
-import '@/assets/styles/ruoyi.scss' // ruoyi css
-import App from './App'
-import store from './store'
-import router from './router'
+/**
+ * 这两个通常控制了：页面基础样式、主题颜色、滚动条、按钮、布局规范、UI 定制样式
+ */
+import '@/assets/styles/index.scss' // global css// 引入全局样式
+import '@/assets/styles/ruoyi.scss' // ruoyi css // 引入 ruoyi 样式
+import App from './App' // 引入 App.vue
+import store from './store' // 引入 store
+import router from './router' // 引入 router
 import directive from './directive' // directive
 import plugins from './plugins' // plugins
 import { download } from '@/utils/request'
@@ -72,6 +75,14 @@ DictData.install()
  * please remove it before going online! ! !
  */
 
+
+
+/**
+ * import Element from 'element-ui'
+ * import './assets/styles/element-variables.scss'
+ * })
+ * 加载 Element-UI 组件库，设置组件默认大小来自 Cookie（可让用户自定义字号）。
+ */
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
 })
@@ -79,8 +90,8 @@ Vue.use(Element, {
 Vue.config.productionTip = false
 
 new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
+  el: '#app', // 挂载点把vue应用挂载到HTML页面中的#app元素上
+  router, //挂载路由系统（用 vue-router）
+  store, //挂载状态管理系统（用 vuex）
+  render: h => h(App) // 渲染App.vue组件
 })

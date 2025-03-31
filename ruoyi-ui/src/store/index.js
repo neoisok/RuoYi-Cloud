@@ -8,7 +8,7 @@ import permission from './modules/permission'
 import settings from './modules/settings'
 import getters from './getters'
 
-Vue.use(Vuex)
+Vue.use(Vuex) // 创建一个 store 实例
 
 const store = new Vuex.Store({
   modules: {

@@ -68,7 +68,8 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        component: () => import('@/views/index'),
+        // 箭头函数 + 动态导入，是 Vue Router 中推荐的懒加载写法 @符号是路径别名表示项目的src目录
+        component: () => import('@/views/index'), 
         name: 'Index',
         meta: { title: '首页', icon: 'dashboard', affix: true }
       }

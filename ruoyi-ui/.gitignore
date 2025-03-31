@@ -18,6 +18,6 @@ selenium-debug.log
 *.njsproj
 *.sln
 *.local
-
+**/.DS_Store
 package-lock.json
 yarn.lock
