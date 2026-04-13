@@ -1,10 +1,12 @@
 <template>
+  <!-- 实现了根据链接类型（内部路由 vs. 外部链接）动态切换为 <router-link> 或 <a> 标签，并自动绑定对应的属性。 -->
   <component :is="type" v-bind="linkProps(to)">
     <slot />
   </component>
 </template>
 
 <script>
+// @ 是指src 构建工具（Webpack、Vite 等）在项目初始化时自动设置
 import { isExternal } from '@/utils/validate'
 
 export default {

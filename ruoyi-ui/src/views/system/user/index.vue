@@ -1,6 +1,8 @@
 <template>
   <div class="app-container">
+    <!-- 列间距20px -->
     <el-row :gutter="20">
+      <!-- :horizontal 动态绑定 "" 里面是值 不加:会把""里面当字符串-->
       <splitpanes :horizontal="this.$store.getters.device === 'mobile'" class="default-theme">
         <!--部门数据-->
         <pane size="16">
@@ -45,7 +47,7 @@
                 <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate" v-hasPermi="['system:user:edit']">修改</el-button>
               </el-col>
               <el-col :span="1.5">
-                <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete" v-hasPermi="['system:user:remove']">删除</el-button>
+                <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete" v-hasPermi="['system:user:remove']">删除1</el-button>
               </el-col>
               <el-col :span="1.5">
                 <el-button type="info" plain icon="el-icon-upload2" size="mini" @click="handleImport" v-hasPermi="['system:user:import']">导入</el-button>
@@ -64,7 +66,8 @@
               <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
               <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
               <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
-                <template slot-scope="scope">
+                <!-- 获取当前这一行的数据 -->
+                <template slot-scope="scope"> 
                   <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"></el-switch>
                 </template>
               </el-table-column>
@@ -76,7 +79,7 @@
               <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
                 <template slot-scope="scope" v-if="scope.row.userId !== 1">
                   <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']">修改</el-button>
-                  <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']">删除</el-button>
+                  <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']">删除1</el-button>
                   <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:user:resetPwd', 'system:user:edit']">
                     <el-button size="mini" type="text" icon="el-icon-d-arrow-right">更多</el-button>
                     <el-dropdown-menu slot="dropdown">
@@ -223,7 +226,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 用户表格数据

@@ -1,6 +1,8 @@
 'use strict'
 const path = require('path')
 
+// __dirname 是 Node.js 中的一个全局变量，表示当前模块所在的目录的绝对路径。
+
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
