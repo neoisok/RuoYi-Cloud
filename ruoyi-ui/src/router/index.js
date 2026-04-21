@@ -28,15 +28,19 @@ import Layout from '@/layout'
   }
  */
 
-// 公共路由
+// 公共路由 1. 静态路由- 不需要权限，所有人可访问
 export const constantRoutes = [
   {
+    // redirect 路由就是一个"假跳转"：先假装跳到另一个页面，再立即跳回来，
+    // 骗过 Vue Router，让它认为页面发生了变化，从而强制重新创建和渲染组件。
+    // 比如用户改变了组件大小切换语言，切换主题，权限变更等场景用到
     path: '/redirect',
     component: Layout,
     hidden: true,
     children: [
       {
         path: '/redirect/:path(.*)',
+        // 懒加载
         component: () => import('@/views/redirect')
       }
     ]
@@ -69,6 +73,7 @@ export const constantRoutes = [
       {
         path: 'index',
         // 箭头函数 + 动态导入，是 Vue Router 中推荐的懒加载写法 @符号是路径别名表示项目的src目录
+        // 只有访问该路由时，才会加载对应的组件文件，提高首屏加载速度。
         component: () => import('@/views/index'), 
         name: 'Index',
         meta: { title: '首页', icon: 'dashboard', affix: true }
@@ -79,10 +84,13 @@ export const constantRoutes = [
     path: '/user',
     component: Layout,
     hidden: true,
-    redirect: 'noredirect',
+    redirect: 'noredirect',//"不要自动跳转"，所以直接访问父路径不会显示任何内容，需要访问完整的 /user/profile 才能看到个人中心页面。
     children: [
       {
-        path: 'profile',
+        path: 'profile', // /user/profile 这么拼接的
+        // 直接写箭头函数 + import
+        // 函数不会立即执行，只有调用时才执行
+        // 路由跳转时 Vue 会调用这个函数
         component: () => import('@/views/system/user/profile/index'),
         name: 'Profile',
         meta: { title: '个人中心', icon: 'user' }
@@ -97,9 +105,11 @@ export const dynamicRoutes = [
     path: '/system/user-auth',
     component: Layout,
     hidden: true,
-    permissions: ['system:user:edit'],
+    permissions: ['system:user:edit'],// 需要权限才能访问
     children: [
       {
+        // 动态参数名，通过 this.$route.params.userId 获取
+        // (\\d+)	正则表达式，只匹配数字，\\d	匹配任意数字（0-9） +	匹配一个或多个
         path: 'role/:userId(\\d+)',
         component: () => import('@/views/system/user/authRole'),
         name: 'AuthRole',
@@ -163,22 +173,29 @@ export const dynamicRoutes = [
       }
     ]
   }
+
 ]
 
+// 用户操作：连续两次点击同一个菜单会报错
+// this.$router.push('/system/user')  // 第一次点击：正常跳转
+// this.$router.push('/system/user')  // 第二次点击：报错！]
 // 防止连续点击多次路由报错
+
+// 1. 保存原始的 push 和 replace 方法
 let routerPush = Router.prototype.push;
 let routerReplace = Router.prototype.replace;
-// push
+// // 2. 重写 push 方法
 Router.prototype.push = function push(location) {
+  // 调用原始 push 方法，并用 .catch() 捕获错误 .catch() 捕获错误，返回 err（不抛出）
   return routerPush.call(this, location).catch(err => err)
 }
-// replace
+// 3. 同样重写 replace 方法
 Router.prototype.replace = function push(location) {
   return routerReplace.call(this, location).catch(err => err)
 }
 
 export default new Router({
   mode: 'history', // 去掉url中的#
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  scrollBehavior: () => ({ y: 0 }), // 路由切换时滚动到顶部
+  routes: constantRoutes // 注册路由
 })
