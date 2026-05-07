@@ -16,7 +16,7 @@ const permission = { // 定义一个名为permission的vuex模块
   mutations: {
     SET_ROUTES: (state, routes) => { // 设置路由 
       state.addRoutes = routes
-      state.routes = constantRoutes.concat(routes)
+      state.routes = constantRoutes.concat(routes) // 合并两个数组
     },
     SET_DEFAULT_ROUTES: (state, routes) => { // 设置默认路由
       state.defaultRoutes = constantRoutes.concat(routes)
@@ -34,8 +34,12 @@ const permission = { // 定义一个名为permission的vuex模块
       return new Promise(resolve => {
         // 向后端请求路由数据
         getRouters().then(res => {
+          // 这是一个深拷贝的经典写法，目的是创建数据的独立副本，避免修改原数据。
+          // 第一步：JSON.stringify() 转换为字符串
+          // 第二步：JSON.parse() 解析为新对象
           const sdata = JSON.parse(JSON.stringify(res.data))
           const rdata = JSON.parse(JSON.stringify(res.data))
+          // debugger;
           const sidebarRoutes = filterAsyncRouter(sdata)
           const rewriteRoutes = filterAsyncRouter(rdata, false, true)
           const asyncRoutes = filterDynamicRoutes(dynamicRoutes);

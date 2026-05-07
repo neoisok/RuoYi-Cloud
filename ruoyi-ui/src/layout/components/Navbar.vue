@@ -4,7 +4,7 @@
 
     <breadcrumb v-if="!topNav" id="breadcrumb-container" class="breadcrumb-container" />
     <top-nav v-if="topNav" id="topmenu-container" class="topmenu-container" />
-
+    <!-- <top-nav1/> -->
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
@@ -50,6 +50,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import TopNav from '@/components/TopNav'
+import TopNav1 from '@/components/TopNav1'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
@@ -61,6 +62,7 @@ export default {
   components: {
     Breadcrumb,
     TopNav,
+    TopNav1,
     Hamburger,
     Screenfull,
     SizeSelect,

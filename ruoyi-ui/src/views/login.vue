@@ -141,6 +141,7 @@ export default {
             Cookies.remove("password");
             Cookies.remove('rememberMe');
           }
+          // this.$store this.$router 能访问到？？？why
           this.$store.dispatch("Login", this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
           }).catch(() => {

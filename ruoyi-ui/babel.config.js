@@ -2,6 +2,7 @@ module.exports = {
   presets: [
     // https://github.com/vuejs/vue-cli/tree/master/packages/@vue/babel-preset-app
     '@vue/cli-plugin-babel/preset'
+    // 这个预设已经包含了 JSX 转换插件
   ],
   'env': {
     'development': {

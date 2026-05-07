@@ -59,6 +59,8 @@ const user = {
     },
 
     // 获取用户信息
+    //resolve() = 成功完成，触发 .then()
+    // reject() = 失败报错，触发 .catch()
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo().then(res => {

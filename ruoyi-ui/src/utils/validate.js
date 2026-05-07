@@ -1,4 +1,4 @@
-x/**
+/**
  * 路径匹配器
  * @param {string} pattern
  * @param {string} path

@@ -9,7 +9,7 @@ export const options = {
        */
       request: (dictMeta) => {
         console.log(`load dict ${dictMeta.type}`)
-        return Promise.resolve([])
+        return Promise.resolve([]) // 一个默认实现返回一个空数组，这个函数会被覆盖成真正的 API 请求：
       },
       /**
        * 字典响应数据转换器，方法签名为function(response: Object, dictMeta: DictMeta): DictData
@@ -41,6 +41,7 @@ function responseConverter(response, dictMeta) {
     console.warn(`no dict data of "${dictMeta.type}" found in the response`)
     return []
   }
+  // dictMeta.labelField  dictMeta.valueField
   return dicts.map(d => dictConverter(d, dictMeta))
 }
 

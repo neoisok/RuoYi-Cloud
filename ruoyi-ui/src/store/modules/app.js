@@ -1,10 +1,26 @@
+// 这是一个 app 模块，负责存储和管理与应用程序 UI 相关的状态。主要控制侧边栏、设备类型和组件尺寸
 import Cookies from 'js-cookie'
 
 const state = { // 用于存储数据
   sidebar: {
-    opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
-    withoutAnimation: false,
-    hide: false
+    //!! 将数字转为布尔值（!!1 → true，!!0 → false）
+    //!! 是 JavaScript 中的逻辑非双重否定运算符，它的作用是将任何值强制转换为布尔值（true 或 false）。
+    // + 号将字符串转为数字（+'1' → 1，+'0' → 0）
+    /**
+     * 
+     * 原始值	第一次取反 !	第二次取反 !!	最终布尔值
+     * 1	false	true	✅ true
+     * 0	true	false	❌ false
+     * "hello"	false	true	✅ true
+     * "" (空字符串)	true	false	❌ false
+     * null	true	false	❌ false
+     * undefined	true	false	❌ false
+     * {} (空对象)	false	true	✅ true
+     *
+     */
+    opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,//从 Cookie 读取侧边栏状态，转换后存储（true=打开，false=关闭）
+    withoutAnimation: false, // 是否无动画
+    hide: false //是否隐藏侧边栏
   },
   device: 'desktop',
   size: Cookies.get('size') || 'medium'
@@ -43,6 +59,7 @@ const mutations = { // 用于修改state中的数据
 }
 
 const actions = {// 用于响应组件中的用户操作
+  // {commit} 解构写法
   toggleSideBar({ commit }) {// 切换侧边栏
     commit('TOGGLE_SIDEBAR')
   },

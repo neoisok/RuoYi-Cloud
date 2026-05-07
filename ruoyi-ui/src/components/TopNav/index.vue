@@ -39,6 +39,9 @@ import { isHttp } from "@/utils/validate";
 const hideList = ['/index', '/user/profile'];
 
 export default {
+  mounted(){
+      console.log("mountedmountedmountedmountedmounted")
+    },
   data() {
     return {
       // 顶部栏初始数
@@ -64,6 +67,7 @@ export default {
           }
         }
       });
+      console.log(topMenus)
       return topMenus;
     },
     // 所有的路由信息

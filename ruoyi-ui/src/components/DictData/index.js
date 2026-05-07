@@ -15,7 +15,7 @@ function searchDictByKey(dict, key) {
     }
   } catch (e) {
     return null
-  }
+  } 
 }
 
 function install() {
@@ -24,6 +24,7 @@ function install() {
       '*': {
         labelField: 'dictLabel',
         valueField: 'dictValue',
+        //ES6语法，当属性的值是一个函数时，可以省略 : function，直接写函数名和参数。
         request(dictMeta) {
           const storeDict = searchDictByKey(store.getters.dict, dictMeta.type)
           if (storeDict) {

@@ -1,5 +1,6 @@
 <template>
   <!-- 实现了根据链接类型（内部路由 vs. 外部链接）动态切换为 <router-link> 或 <a> 标签，并自动绑定对应的属性。 -->
+  <!-- v-bind="对象"  当用于绑定 class 或 style attribute，v-bind 支持额外的值类型如数组或对象-->
   <component :is="type" v-bind="linkProps(to)">
     <slot />
   </component>

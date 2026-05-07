@@ -1,7 +1,7 @@
 import defaultSettings from '@/settings'
 
 const { sideTheme, showSettings, topNav, tagsView, fixedHeader, sidebarLogo, dynamicTitle } = defaultSettings
-
+// 这个状态从storage中读取
 const storageSetting = JSON.parse(localStorage.getItem('layout-setting')) || ''
 const state = {
   title: '',

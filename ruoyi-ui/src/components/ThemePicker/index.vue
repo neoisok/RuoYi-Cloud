@@ -23,13 +23,17 @@ export default {
     }
   },
   watch: {
+    // 监视defaultTheme 当defaultTheme发生变化的时候调用function
     defaultTheme: {
+      // val 新的值 oldVal 旧的值
       handler: function(val, oldVal) {
         this.theme = val
       },
+      // 默认是false 调成true之后 一刷新一上来初始化就执行，模式是变化的时候才执行
       immediate: true
     },
     async theme(val) {
+      // setTheme 是一个异步函数，里面需要等待下载 CSS 文件完成。
       await this.setTheme(val)
     }
   },

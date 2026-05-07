@@ -32,7 +32,9 @@ import variables from "@/assets/styles/variables.scss";
 export default {
     components: { SidebarItem, Logo },
     computed: {
+        // 从store读取state数据
         ...mapState(["settings"]),
+        // 从getters读取属性
         ...mapGetters(["sidebarRouters", "sidebar"]),
         activeMenu() {
             const route = this.$route;

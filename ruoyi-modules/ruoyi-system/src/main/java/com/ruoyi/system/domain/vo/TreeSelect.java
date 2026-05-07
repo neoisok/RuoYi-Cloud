@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hrp.cost.api.domain.HospitalDept;
 import com.ruoyi.common.core.constant.UserConstants;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.system.api.domain.SysDept;
@@ -18,8 +19,15 @@ public class TreeSelect implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    /** 节点ID */
+    /**
+     * 节点ID（支持Long类型）
+     */
     private Long id;
+
+    /**
+     * 节点ID（支持String类型，用于HospitalDept等）
+     */
+    private String stringId;
 
     /** 节点名称 */
     private String label;
@@ -51,6 +59,17 @@ public class TreeSelect implements Serializable
         this.children = menu.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
     }
 
+    public TreeSelect(HospitalDept dept)
+    {
+        this.stringId = dept.getDm();
+        this.label = dept.getMc();
+        this.disabled = false;
+        if (dept.getChildren() != null && !dept.getChildren().isEmpty())
+        {
+            this.children = dept.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
+        }
+    }
+
     public Long getId()
     {
         return id;
@@ -59,6 +78,16 @@ public class TreeSelect implements Serializable
     public void setId(Long id)
     {
         this.id = id;
+    }
+
+    public String getStringId()
+    {
+        return stringId;
+    }
+
+    public void setStringId(String stringId)
+    {
+        this.stringId = stringId;
     }
 
     public String getLabel()

@@ -35,6 +35,7 @@ export default {
       type: Array,
       default: null,
     },
+    // value可以穿三种类型的值
     value: [Number, String, Array],
     // 当未找到匹配的数据时，显示value
     showValue: {

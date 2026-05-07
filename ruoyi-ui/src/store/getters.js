@@ -17,3 +17,12 @@ const getters = {
   sidebarRouters:state => state.permission.sidebarRouters,
 }
 export default getters
+
+// bigSum(state) {
+//   return state.sum * 10
+// }
+// 写成箭头函数如下
+// 1、 bigSum2: state => state.sum * 10,
+// 2、bigSum3: state => {
+//     return state.sum * 10
+//   }

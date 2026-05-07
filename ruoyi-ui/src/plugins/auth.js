@@ -4,6 +4,7 @@ function authPermission(permission) {
   const all_permission = "*:*:*";
   const permissions = store.getters && store.getters.permissions
   if (permission && permission.length > 0) {
+    // some() 是数组的一个方法，用于检查数组中是否至少有一个元素满足条件。
     return permissions.some(v => {
       return all_permission === v || v === permission
     })

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hrp.cost.mapper.HospitalDeptMapper">
+
+	<resultMap type="com.hrp.cost.api.domain.HospitalDept" id="HospitalDeptResult">
+		<id     property="dm"       column="DM"       />
+		<result property="mc"       column="MC"       />
+		<result property="jb"       column="JB"       />
+		<result property="fldm"     column="FLDM"     />
+		<result property="xzdm"     column="XZDM"     />
+		<result property="hspb"     column="HSPB"     />
+		<result property="mjpb"     column="MJPB"     />
+		<result property="zfpb"     column="ZFPB"     />
+		<result property="zfrq"     column="ZFRQ"     />
+		<result property="srm1"     column="SRM1"     />
+		<result property="srm2"     column="SRM2"     />
+		<result property="srm3"     column="SRM3"     />
+		<result property="bz"       column="BZ"       />
+		<result property="srpb"     column="SRPB"     />
+		<result property="ksdm"     column="KSDM"     />
+		<result property="yqdm"     column="YQDM"     />
+	</resultMap>
+
+	<sql id="selectDeptVo">
+		select DM, MC, JB, FLDM, XZDM, HSPB, MJPB, ZFPB, ZFRQ, SRM1, SRM2, SRM3, BZ, SRPB, KSDM, YQDM
+		from CBGL_KSDM
+	</sql>
+
+	<!-- 查询部门列表 -->
+	<select id="selectDeptList" parameterType="com.hrp.cost.api.domain.HospitalDept" resultMap="HospitalDeptResult">
+		<include refid="selectDeptVo"/>
+		<where>
+			<if test="dm != null and dm != ''">
+				AND DM = #{dm}
+			</if>
+			<if test="mc != null and mc != ''">
+				AND MC like concat('%', #{mc}, '%')
+			</if>
+			<if test="jb != null">
+				AND JB = #{jb}
+			</if>
+			<if test="fldm != null and fldm != ''">
+				AND FLDM = #{fldm}
+			</if>
+			<if test="xzdm != null">
+				AND XZDM = #{xzdm}
+			</if>
+			<if test="hspb != null">
+				AND HSPB = #{hspb}
+			</if>
+			<if test="mjpb != null">
+				AND MJPB = #{mjpb}
+			</if>
+			<if test="zfpb != null">
+				AND ZFPB = #{zfpb}
+			</if>
+			<if test="srpb != null">
+				AND SRPB = #{srpb}
+			</if>
+			<if test="ksdm != null and ksdm != ''">
+				AND KSDM = #{ksdm}
+			</if>
+			<if test="yqdm != null and yqdm != ''">
+				AND YQDM = #{yqdm}
+			</if>
+		</where>
+		order by ksdm
+	</select>
+
+	<!-- 根据主键查询部门 -->
+	<select id="selectDeptById" parameterType="String" resultMap="HospitalDeptResult">
+		<include refid="selectDeptVo"/>
+		where DM = #{dm}
+	</select>
+
+	<!-- 根据ID查询所有子部门 -->
+	<select id="selectChildrenDeptById" parameterType="String" resultMap="HospitalDeptResult">
+		<include refid="selectDeptVo"/>
+		where FLDM = #{dm}
+	</select>
+
+	<!-- 根据ID查询所有子部门（正常状态） -->
+	<select id="selectNormalChildrenDeptById" parameterType="String" resultType="int">
+		select count(*) from CBGL_KSDM where ZFPB = 0 and FLDM = #{dm}
+	</select>
+
+	<!-- 检查部门下是否存在子部门 -->
+	<select id="hasChildByDeptId" parameterType="String" resultType="int">
+		select count(1) from CBGL_KSDM where FLDM = #{dm} limit 1
+	</select>
+
+	<!-- 查询部门是否存在用户 -->
+	<select id="checkDeptExistUser" parameterType="String" resultType="int">
+		select count(1) from sys_user where dept_id = #{dm} and del_flag = '0'
+	</select>
+
+	<!-- 校验部门名称是否唯一 -->
+	<select id="checkDeptNameUnique" resultMap="HospitalDeptResult">
+		<include refid="selectDeptVo"/>
+		where MC = #{mc} and FLDM = #{fldm} limit 1
+	</select>
+
+	<!-- 插入部门 -->
+	<insert id="insertDept" parameterType="com.hrp.cost.api.domain.HospitalDept">
+		insert into CBGL_KSDM
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dm != null and dm != ''">DM,</if>
+			<if test="mc != null and mc != ''">MC,</if>
+			<if test="jb != null">JB,</if>
+			<if test="fldm != null and fldm != ''">FLDM,</if>
+			<if test="xzdm != null">XZDM,</if>
+			<if test="hspb != null">HSPB,</if>
+			<if test="mjpb != null">MJPB,</if>
+			<if test="zfpb != null">ZFPB,</if>
+			<if test="zfrq != null">ZFRQ,</if>
+			<if test="srm1 != null and srm1 != ''">SRM1,</if>
+			<if test="srm2 != null and srm2 != ''">SRM2,</if>
+			<if test="srm3 != null and srm3 != ''">SRM3,</if>
+			<if test="bz != null and bz != ''">BZ,</if>
+			<if test="srpb != null">SRPB,</if>
+			<if test="ksdm != null and ksdm != ''">KSDM,</if>
+			<if test="yqdm != null and yqdm != ''">YQDM,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dm != null and dm != ''">#{dm},</if>
+			<if test="mc != null and mc != ''">#{mc},</if>
+			<if test="jb != null">#{jb},</if>
+			<if test="fldm != null and fldm != ''">#{fldm},</if>
+			<if test="xzdm != null">#{xzdm},</if>
+			<if test="hspb != null">#{hspb},</if>
+			<if test="mjpb != null">#{mjpb},</if>
+			<if test="zfpb != null">#{zfpb},</if>
+			<if test="zfrq != null">#{zfrq},</if>
+			<if test="srm1 != null and srm1 != ''">#{srm1},</if>
+			<if test="srm2 != null and srm2 != ''">#{srm2},</if>
+			<if test="srm3 != null and srm3 != ''">#{srm3},</if>
+			<if test="bz != null and bz != ''">#{bz},</if>
+			<if test="srpb != null">#{srpb},</if>
+			<if test="ksdm != null and ksdm != ''">#{ksdm},</if>
+			<if test="yqdm != null and yqdm != ''">#{yqdm},</if>
+		</trim>
+	</insert>
+
+	<!-- 更新部门 -->
+	<update id="updateDept" parameterType="com.hrp.cost.api.domain.HospitalDept">
+		update CBGL_KSDM
+		<set>
+			<if test="mc != null and mc != ''">MC = #{mc},</if>
+			<if test="jb != null">JB = #{jb},</if>
+			<if test="fldm != null and fldm != ''">FLDM = #{fldm},</if>
+			<if test="xzdm != null">XZDM = #{xzdm},</if>
+			<if test="hspb != null">HSPB = #{hspb},</if>
+			<if test="mjpb != null">MJPB = #{mjpb},</if>
+			<if test="zfpb != null">ZFPB = #{zfpb},</if>
+			<if test="zfrq != null">ZFRQ = #{zfrq},</if>
+			<if test="srm1 != null and srm1 != ''">SRM1 = #{srm1},</if>
+			<if test="srm2 != null and srm2 != ''">SRM2 = #{srm2},</if>
+			<if test="srm3 != null and srm3 != ''">SRM3 = #{srm3},</if>
+			<if test="bz != null and bz != ''">BZ = #{bz},</if>
+			<if test="srpb != null">SRPB = #{srpb},</if>
+			<if test="ksdm != null and ksdm != ''">KSDM = #{ksdm},</if>
+			<if test="yqdm != null and yqdm != ''">YQDM = #{yqdm},</if>
+		</set>
+		where DM = #{dm}
+	</update>
+
+	<!-- 删除部门 -->
+	<delete id="deleteDeptById" parameterType="String">
+		delete from CBGL_KSDM where DM = #{dm}
+	</delete>
+
+</mapper>

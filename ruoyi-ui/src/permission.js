@@ -28,6 +28,7 @@ router.beforeEach((to, from, next) => {
     } else if (isWhiteList(to.path)) {
       next()
     } else {
+      //场景：已登录用户第一次访问业务页面
       if (store.getters.roles.length === 0) {
         isRelogin.show = true
         // 判断当前用户是否已拉取完user_info信息
@@ -36,6 +37,7 @@ router.beforeEach((to, from, next) => {
           store.dispatch('GenerateRoutes').then(accessRoutes => {
             // 根据roles权限生成可访问的路由表
             router.addRoutes(accessRoutes) // 动态添加可访问路由表
+            console.log('动态路由已添加，即将创建组件')
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
           })
         }).catch(err => {

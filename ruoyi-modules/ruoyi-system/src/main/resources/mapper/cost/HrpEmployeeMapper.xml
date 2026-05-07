@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hrp.cost.mapper.HrpEmployeeMapper">
+
+    <resultMap type="com.hrp.cost.api.domain.HrpEmployee" id="HrpEmployeeResult">
+        <id     property="zggh"       column="ZGGH"      />
+        <result property="zgdm"       column="ZGDM"      />
+        <result property="ksdm"       column="KSDM"      />
+        <result property="zgxms"      column="ZGXM"      />
+        <result property="xb"         column="XB"        />
+        <result property="csrq"       column="CSRQ"      />
+        <result property="sfz"        column="SFZ"       />
+        <result property="dz"         column="DZ"        />
+        <result property="dhhm"       column="DHHM"      />
+        <result property="sjhm"       column="SJHM"      />
+        <result property="yhkh1"      column="YHKH1"     />
+        <result property="srm1"       column="SRM1"      />
+        <result property="srm2"       column="SRM2"      />
+        <result property="srm3"       column="SRM3"      />
+        <result property="zw"         column="ZW"        />
+        <result property="zc"         column="ZC"        />
+        <result property="dqzt"       column="DQZT"      />
+        <result property="bz"         column="BZ"        />
+        <result property="zgkl"       column="ZGKL"      />
+        <result property="syfw"       column="SYFW"      />
+        <result property="jjks"       column="JJKS"      />
+        <result property="zglb"       column="ZGLB"      />
+        <result property="zgxz"       column="ZGXZ"      />
+        <result property="cbxs"       column="CBXS"      />
+        <result property="ryxz"       column="RYXZ"      />
+    </resultMap>
+
+    <sql id="selectEmployeeVo">
+        select ZGGH, ZGDM, KSDM, ZGXM, XB, CSRQ, SFZ, DZ, DHHM, SJHM, YHKH1, SRM1, SRM2, SRM3, 
+               ZW, ZC, DQZT, BZ, ZGKL, SYFW, JJKS, ZGLB, ZGXZ, CBXS, RYXZ
+        from RSGL_ZGXX
+    </sql>
+
+    <select id="selectEmployeeList" parameterType="com.hrp.cost.api.domain.HrpEmployee" resultMap="HrpEmployeeResult">
+        <include refid="selectEmployeeVo"/>
+        <where>
+            <if test="zggh != null and zggh != ''">
+                AND ZGGH = #{zggh}
+            </if>
+            <if test="zgdm != null and zgdm != ''">
+                AND ZGDM = #{zgdm}
+            </if>
+            <if test="ksdm != null and ksdm != ''">
+                AND KSDM = #{ksdm}
+            </if>
+            <if test="zgxms != null and zgxms != ''">
+                AND ZGXM like concat('%', #{zgxms}, '%')
+            </if>
+            <if test="xb != null and xb != ''">
+                AND XB = #{xb}
+            </if>
+            <if test="sfz != null and sfz != ''">
+                AND SFZ = #{sfz}
+            </if>
+            <if test="sjhm != null and sjhm != ''">
+                AND SJHM = #{sjhm}
+            </if>
+            <if test="dhhm != null and dhhm != ''">
+                AND DHHM = #{dhhm}
+            </if>
+            <if test="zw != null and zw != ''">
+                AND ZW = #{zw}
+            </if>
+            <if test="zc != null and zc != ''">
+                AND ZC = #{zc}
+            </if>
+            <if test="dqzt != null and dqzt != ''">
+                AND DQZT = #{dqzt}
+            </if>
+            <if test="zgkl != null and zgkl != ''">
+                AND ZGKL = #{zgkl}
+            </if>
+            <if test="syfw != null">
+                AND SYFW = #{syfw}
+            </if>
+            <if test="zglb != null and zglb != ''">
+                AND ZGLB = #{zglb}
+            </if>
+            <if test="zgxz != null and zgxz != ''">
+                AND ZGXZ = #{zgxz}
+            </if>
+            <if test="ryxz != null and ryxz != ''">
+                AND RYXZ = #{ryxz}
+            </if>
+        </where>
+        order by ZGGH
+    </select>
+
+    <select id="selectEmployeeById" parameterType="String" resultMap="HrpEmployeeResult">
+        <include refid="selectEmployeeVo"/>
+        where ZGGH = #{zggh}
+    </select>
+
+    <select id="checkEmployeeUnique" parameterType="String" resultMap="HrpEmployeeResult">
+        <include refid="selectEmployeeVo"/>
+        where ZGGH = #{zggh} limit 1
+    </select>
+
+    <select id="checkPhoneUnique" parameterType="String" resultMap="HrpEmployeeResult">
+        <include refid="selectEmployeeVo"/>
+        where SJHM = #{sjhm} limit 1
+    </select>
+
+    <select id="checkIdCardUnique" parameterType="String" resultMap="HrpEmployeeResult">
+        <include refid="selectEmployeeVo"/>
+        where SFZ = #{sfz} limit 1
+    </select>
+
+    <insert id="insertEmployee" parameterType="com.hrp.cost.api.domain.HrpEmployee">
+        insert into RSGL_ZGXX
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="zggh != null and zggh != ''">ZGGH,</if>
+            <if test="zgdm != null and zgdm != ''">ZGDM,</if>
+            <if test="ksdm != null and ksdm != ''">KSDM,</if>
+            <if test="zgxms != null and zgxms != ''">ZGXM,</if>
+            <if test="xb != null and xb != ''">XB,</if>
+            <if test="csrq != null">CSRQ,</if>
+            <if test="sfz != null and sfz != ''">SFZ,</if>
+            <if test="dz != null and dz != ''">DZ,</if>
+            <if test="dhhm != null and dhhm != ''">DHHM,</if>
+            <if test="sjhm != null and sjhm != ''">SJHM,</if>
+            <if test="yhkh1 != null and yhkh1 != ''">YHKH1,</if>
+            <if test="srm1 != null and srm1 != ''">SRM1,</if>
+            <if test="srm2 != null and srm2 != ''">SRM2,</if>
+            <if test="srm3 != null and srm3 != ''">SRM3,</if>
+            <if test="zw != null and zw != ''">ZW,</if>
+            <if test="zc != null and zc != ''">ZC,</if>
+            <if test="dqzt != null and dqzt != ''">DQZT,</if>
+            <if test="bz != null and bz != ''">BZ,</if>
+            <if test="zgkl != null and zgkl != ''">ZGKL,</if>
+            <if test="syfw != null">SYFW,</if>
+            <if test="jjks != null and jjks != ''">JJKS,</if>
+            <if test="zglb != null and zglb != ''">ZGLB,</if>
+            <if test="zgxz != null and zgxz != ''">ZGXZ,</if>
+            <if test="cbxs != null">CBXS,</if>
+            <if test="ryxz != null and ryxz != ''">RYXZ,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="zggh != null and zggh != ''">#{zggh},</if>
+            <if test="zgdm != null and zgdm != ''">#{zgdm},</if>
+            <if test="ksdm != null and ksdm != ''">#{ksdm},</if>
+            <if test="zgxms != null and zgxms != ''">#{zgxms},</if>
+            <if test="xb != null and xb != ''">#{xb},</if>
+            <if test="csrq != null">#{csrq},</if>
+            <if test="sfz != null and sfz != ''">#{sfz},</if>
+            <if test="dz != null and dz != ''">#{dz},</if>
+            <if test="dhhm != null and dhhm != ''">#{dhhm},</if>
+            <if test="sjhm != null and sjhm != ''">#{sjhm},</if>
+            <if test="yhkh1 != null and yhkh1 != ''">#{yhkh1},</if>
+            <if test="srm1 != null and srm1 != ''">#{srm1},</if>
+            <if test="srm2 != null and srm2 != ''">#{srm2},</if>
+            <if test="srm3 != null and srm3 != ''">#{srm3},</if>
+            <if test="zw != null and zw != ''">#{zw},</if>
+            <if test="zc != null and zc != ''">#{zc},</if>
+            <if test="dqzt != null and dqzt != ''">#{dqzt},</if>
+            <if test="bz != null and bz != ''">#{bz},</if>
+            <if test="zgkl != null and zgkl != ''">#{zgkl},</if>
+            <if test="syfw != null">#{syfw},</if>
+            <if test="jjks != null and jjks != ''">#{jjks},</if>
+            <if test="zglb != null and zglb != ''">#{zglb},</if>
+            <if test="zgxz != null and zgxz != ''">#{zgxz},</if>
+            <if test="cbxs != null">#{cbxs},</if>
+            <if test="ryxz != null and ryxz != ''">#{ryxz},</if>
+        </trim>
+    </insert>
+
+    <update id="updateEmployee" parameterType="com.hrp.cost.api.domain.HrpEmployee">
+        update RSGL_ZGXX
+        <set>
+            <if test="zgdm != null and zgdm != ''">ZGDM = #{zgdm},</if>
+            <if test="ksdm != null and ksdm != ''">KSDM = #{ksdm},</if>
+            <if test="zgxms != null and zgxms != ''">ZGXM = #{zgxms},</if>
+            <if test="xb != null and xb != ''">XB = #{xb},</if>
+            <if test="csrq != null">CSRQ = #{csrq},</if>
+            <if test="sfz != null and sfz != ''">SFZ = #{sfz},</if>
+            <if test="dz != null and dz != ''">DZ = #{dz},</if>
+            <if test="dhhm != null and dhhm != ''">DHHM = #{dhhm},</if>
+            <if test="sjhm != null and sjhm != ''">SJHM = #{sjhm},</if>
+            <if test="yhkh1 != null and yhkh1 != ''">YHKH1 = #{yhkh1},</if>
+            <if test="srm1 != null and srm1 != ''">SRM1 = #{srm1},</if>
+            <if test="srm2 != null and srm2 != ''">SRM2 = #{srm2},</if>
+            <if test="srm3 != null and srm3 != ''">SRM3 = #{srm3},</if>
+            <if test="zw != null and zw != ''">ZW = #{zw},</if>
+            <if test="zc != null and zc != ''">ZC = #{zc},</if>
+            <if test="dqzt != null and dqzt != ''">DQZT = #{dqzt},</if>
+            <if test="bz != null and bz != ''">BZ = #{bz},</if>
+            <if test="zgkl != null and zgkl != ''">ZGKL = #{zgkl},</if>
+            <if test="syfw != null">SYFW = #{syfw},</if>
+            <if test="jjks != null and jjks != ''">JJKS = #{jjks},</if>
+            <if test="zglb != null and zglb != ''">ZGLB = #{zglb},</if>
+            <if test="zgxz != null and zgxz != ''">ZGXZ = #{zgxz},</if>
+            <if test="cbxs != null">CBXS = #{cbxs},</if>
+            <if test="ryxz != null and ryxz != ''">RYXZ = #{ryxz},</if>
+        </set>
+        where ZGGH = #{zggh}
+    </update>
+
+    <delete id="deleteEmployeeById" parameterType="String">
+        delete from RSGL_ZGXX where ZGGH = #{zggh}
+    </delete>
+
+    <delete id="deleteEmployeeByIds" parameterType="String">
+        delete from RSGL_ZGXX where ZGGH in
+        <foreach collection="array" item="zggh" open="(" separator="," close=")">
+            #{zggh}
+        </foreach>
+    </delete>
+
+</mapper>

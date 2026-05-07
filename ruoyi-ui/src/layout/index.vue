@@ -34,6 +34,7 @@ export default {
   },
   mixins: [ResizeMixin],
   computed: {
+    // 展开运算符
     ...mapState({
       theme: state => state.settings.theme,
       sideTheme: state => state.settings.sideTheme,

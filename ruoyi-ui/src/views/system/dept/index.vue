@@ -298,6 +298,7 @@ export default {
         this.open = true;
         this.title = "修改部门";
       });
+      // 当你编辑一个部门时，不能把它自己或它的下级部门作为自己的上级部门（否则会形成循环）。
       listDeptExcludeChild(row.deptId).then(response => {
         this.deptOptions = this.handleTree(response.data, "deptId");
       });

@@ -1,6 +1,7 @@
 package com.ruoyi.system.controller;
 
 import java.util.List;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +26,7 @@ import com.ruoyi.system.service.ISysDeptService;
 
 /**
  * 部门信息
- * 
+ *
  * @author ruoyi
  */
 @RestController

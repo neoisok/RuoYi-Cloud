@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        function Fn() {
+
+        }
+        const fn = new Fn() //Fn是构造函数 fn是实例对象（对象）
+        console.log(Fn.prototype) //Fn是函数对象
+        Fn.bind({}) // 函数对象有bind方法 包括apply都是函数对象才有，为什么所有函数对象都有这个方法，方法在 Fucntion 上
+        Fn.call({}) //Fn 是函数对象
+        $('#test') // JQuery函数
+        $.get('/test')// JQuery函数对象的get方法 发的get请求
+    </script>
+</body>
+</html>

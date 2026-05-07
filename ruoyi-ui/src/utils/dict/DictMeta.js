@@ -10,12 +10,12 @@ import DictOptions from './DictOptions'
  */
 export default class DictMeta {
   constructor(options) {
-    this.type = options.type
-    this.request = options.request
-    this.responseConverter = options.responseConverter
-    this.labelField = options.labelField
-    this.valueField = options.valueField
-    this.lazy = options.lazy === true
+    this.type = options.type // type
+    this.request = options.request // request
+    this.responseConverter = options.responseConverter // responseConverter
+    this.labelField = options.labelField // labelField
+    this.valueField = options.valueField // valueField
+    this.lazy = options.lazy === true // lazy
   }
 }
 
@@ -28,6 +28,8 @@ export default class DictMeta {
 DictMeta.parse= function(options) {
   let opts = null
   if (typeof options === 'string') {
+    // DictOptions.metas.xx	属性名是固定的，直接写
+    // DictOptions.metas[options]	属性名是变量，用变量的值作为属性名
     opts = DictOptions.metas[options] || {}
     opts.type = options
   } else if (typeof options === 'object') {
