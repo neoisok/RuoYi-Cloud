@@ -11,7 +11,7 @@
               <el-input v-model="deptName" placeholder="请输入科室名称1" clearable size="small" prefix-icon="el-icon-search" style="margin-bottom: 20px" />
             </div>
             <div class="head-container">
-              <el-tree :data="deptOptions" :props="defaultProps" :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree" node-key="id" default-expand-all highlight-current @node-click="handleNodeClick" />
+              <el-tree :data="deptOptions" :props="defaultProps" :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree" node-key="stringId" default-expand-all highlight-current @node-click="handleNodeClick" />
             </div>
           </el-col>
         </pane>
@@ -19,19 +19,17 @@
         <pane size="84">
           <el-col>
             <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-              <el-form-item label="用户名称" prop="userName">
-                <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
+              <el-form-item label="职工工号" prop="zggh">
+                <el-input v-model="queryParams.zggh" placeholder="请输入职工工号" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
               </el-form-item>
-              <el-form-item label="手机号码" prop="phonenumber">
-                <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
+              <el-form-item label="职工姓名" prop="zgxms">
+                <el-input v-model="queryParams.zgxms" placeholder="请输入职工姓名" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
               </el-form-item>
-              <el-form-item label="状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="用户状态" clearable style="width: 240px">
-                  <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label" :value="dict.value" />
-                </el-select>
+              <el-form-item label="科室代码" prop="ksdm">
+                <el-input v-model="queryParams.ksdm" placeholder="请输入科室代码" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
               </el-form-item>
-              <el-form-item label="创建时间">
-                <el-date-picker v-model="dateRange" style="width: 240px" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+              <el-form-item label="人员性质" prop="ryxz">
+                <el-input v-model="queryParams.ryxz" placeholder="请输入人员性质" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -60,26 +58,34 @@
 
             <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="50" align="center" />
-              <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
-              <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
-              <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
-              <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
-              <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
-              <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
-                <!-- 获取当前这一行的数据 -->
-                <template slot-scope="scope"> 
-                  <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"></el-switch>
+              <el-table-column label="职工工号" align="center" key="zggh" prop="zggh" v-if="columns[0].visible" />
+              <el-table-column label="职工姓名" align="center" key="zgxms" prop="zgxms" v-if="columns[1].visible" :show-overflow-tooltip="true" />
+              <el-table-column label="性别" align="center" key="xb" prop="xb" v-if="columns[2].visible" width="80">
+                <template slot-scope="scope">
+                  <span>{{ getGenderText(scope.row.xb) }}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[6].visible" width="160">
+              <el-table-column label="出生日期" align="center" key="csrq" prop="csrq" v-if="columns[3].visible" width="120">
                 <template slot-scope="scope">
-                  <span>{{ parseTime(scope.row.createTime) }}</span>
+                  <span>{{ parseTime(scope.row.csrq, '{y}-{m}-{d}') }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="科室代码" align="center" key="ksdm" prop="ksdm" v-if="columns[4].visible" width="100" />
+              <el-table-column label="科室名称" align="center" key="ksmc" prop="ksmc" v-if="columns[9].visible" :show-overflow-tooltip="true" />
+              <el-table-column label="职位" align="center" key="zw" prop="zw" v-if="columns[5].visible" :show-overflow-tooltip="true" />
+              <el-table-column label="职称" align="center" key="zc" prop="zc" v-if="columns[6].visible" :show-overflow-tooltip="true" />
+              <el-table-column label="人员性质" align="center" key="ryxz" prop="ryxz" v-if="columns[7].visible" :show-overflow-tooltip="true" />
+              <el-table-column label="当前状态" align="center" key="dqzt" prop="dqzt" v-if="columns[8].visible" width="100">
+                <template slot-scope="scope">
+                  <el-tag :type="getStatusType(scope.row.dqzt)" size="small">
+                    {{ getStatusText(scope.row.dqzt) }}
+                  </el-tag>
                 </template>
               </el-table-column>
               <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
                 <template slot-scope="scope" v-if="scope.row.userId !== 1">
                   <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:user:edit']">修改</el-button>
-                  <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']">删除1</el-button>
+                  <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['system:user:remove']">删除</el-button>
                   <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:user:resetPwd', 'system:user:edit']">
                     <el-button size="mini" type="text" icon="el-icon-d-arrow-right">更多</el-button>
                     <el-dropdown-menu slot="dropdown">
@@ -91,7 +97,7 @@
               </el-table-column>
             </el-table>
 
-            <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" />
+            <pagination v-show="total > 0" :total="total" :page.sync="queryParams.params.pageNum" :limit.sync="queryParams.params.pageSize" @pagination="getList" />
           </el-col>
         </pane>
       </splitpanes>
@@ -225,8 +231,8 @@
 </template>
 
 <script>
-import { listUser, getUser, delUser, addUser, updateUser, resetUserPwd, changeUserStatus, deptTreeSelect } from "@/api/system/user";
-import {  } from "@/api/hrp/employee";
+import { getUser, delUser, addUser, updateUser, resetUserPwd, changeUserStatus } from "@/api/system/user";
+import { listUser,deptTreeSelect } from "@/api/hrp/employee";
 import { getToken } from "@/utils/auth";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -311,22 +317,27 @@ export default {
       },
       // 查询参数
       queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        userName: undefined,
-        phonenumber: undefined,
-        status: undefined,
-        deptId: undefined
+        params: {
+          pageNum: 1,
+          pageSize: 10
+        },
+        zggh: undefined,
+        zgxms: undefined,
+        ksdmList: [],
+        ryxz: undefined
       },
       // 列信息
       columns: [
-        { key: 0, label: `用户编号`, visible: true },
-        { key: 1, label: `用户名称`, visible: true },
-        { key: 2, label: `用户昵称`, visible: true },
-        { key: 3, label: `部门`, visible: true },
-        { key: 4, label: `手机号码`, visible: true },
-        { key: 5, label: `状态`, visible: true },
-        { key: 6, label: `创建时间`, visible: true }
+        { key: 0, label: `职工工号`, visible: true },
+        { key: 1, label: `职工姓名`, visible: true },
+        { key: 2, label: `性别`, visible: true },
+        { key: 3, label: `出生日期`, visible: true },
+        { key: 4, label: `科室代码`, visible: true },
+        { key: 9, label: `科室名称`, visible: true },
+        { key: 5, label: `职位`, visible: true },
+        { key: 6, label: `职称`, visible: true },
+        { key: 7, label: `人员性质`, visible: true },
+        { key: 8, label: `当前状态`, visible: true }
       ],
       // 表单校验
       rules: {
@@ -409,8 +420,52 @@ export default {
     },
     // 节点单击事件
     handleNodeClick(data) {
-      this.queryParams.deptId = data.id;
+      // 获取当前节点及所有子节点的科室代码
+      const allDeptCodes = this.getAllChildDeptCodes(data);
+      this.queryParams.ksdmList = allDeptCodes;
       this.handleQuery();
+    },
+    // 递归获取所有子节点（包括当前节点）的科室代码
+    getAllChildDeptCodes(node) {
+      const codes = [];
+      if (node.stringId) {
+        codes.push(node.stringId);
+      }
+      if (node.children && node.children.length > 0) {
+        node.children.forEach(child => {
+          const childCodes = this.getAllChildDeptCodes(child);
+          codes.push(...childCodes);
+        });
+      }
+      return codes;
+    },
+    // 获取性别文本
+    getGenderText(gender) {
+      if (!gender) return '';
+      // 如果已经是中文，直接返回
+      if (gender === '男' || gender === '女') return gender;
+      // 如果是数字，进行转换
+      if (gender === '1' || gender === 1) return '男';
+      if (gender === '2' || gender === 2) return '女';
+      return gender;
+    },
+    // 获取状态文本
+    getStatusText(status) {
+      // 空值或null、undefined默认为正常（在职）
+      if (status === null || status === undefined || status === '') return '在职';
+      // 0表示离职
+      if (status === '0' || status === 0) return '离职';
+      // 其他情况默认为在职
+      return '在职';
+    },
+    // 获取状态标签类型
+    getStatusType(status) {
+      // 空值或null、undefined默认为成功（在职）
+      if (status === null || status === undefined || status === '') return 'success';
+      // 0表示离职，显示为danger
+      if (status === '0' || status === 0) return 'danger';
+      // 其他情况默认为成功（在职）
+      return 'success';
     },
     // 用户状态修改
     handleStatusChange(row) {
@@ -448,14 +503,14 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
+      this.queryParams.params.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.dateRange = [];
       this.resetForm("queryForm");
-      this.queryParams.deptId = undefined;
+      this.queryParams.ksdmList = [];
       this.$refs.tree.setCurrentKey(null);
       this.handleQuery();
     },

@@ -2,11 +2,11 @@ import request from '@/utils/request'
 import { parseStrEmpty } from "@/utils/ruoyi";
 
 // 查询用户列表
-export function listUser(query) {
+export function listUser(data) {
   return request({
     url: '/system/hrp/employee/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 

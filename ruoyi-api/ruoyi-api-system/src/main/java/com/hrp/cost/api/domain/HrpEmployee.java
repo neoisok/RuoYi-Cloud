@@ -1,15 +1,18 @@
 package com.hrp.cost.api.domain;
 
+import com.ruoyi.common.core.web.domain.BaseEntity;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 职工信息实体类
  * 
  * @author ruoyi
  */
-public class HrpEmployee implements Serializable {
+public class HrpEmployee extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /** 职工工号（主键） */
@@ -20,6 +23,9 @@ public class HrpEmployee implements Serializable {
 
     /** 科室代码 */
     private String ksdm;
+
+    /** 科室名称（关联查询） */
+    private String ksmc;
 
     /** 职工姓名 */
     private String zgxms;
@@ -87,6 +93,9 @@ public class HrpEmployee implements Serializable {
     /** 人员性质 */
     private String ryxz;
 
+    /** 科室代码列表（用于多科室查询） */
+    private List<String> ksdmList;
+
     public String getZggh() {
         return zggh;
     }
@@ -109,6 +118,14 @@ public class HrpEmployee implements Serializable {
 
     public void setKsdm(String ksdm) {
         this.ksdm = ksdm;
+    }
+
+    public String getKsmc() {
+        return ksmc;
+    }
+
+    public void setKsmc(String ksmc) {
+        this.ksmc = ksmc;
     }
 
     public String getZgxms() {
@@ -285,5 +302,13 @@ public class HrpEmployee implements Serializable {
 
     public void setRyxz(String ryxz) {
         this.ryxz = ryxz;
+    }
+
+    public List<String> getKsdmList() {
+        return ksdmList;
+    }
+
+    public void setKsdmList(List<String> ksdmList) {
+        this.ksdmList = ksdmList;
     }
 }

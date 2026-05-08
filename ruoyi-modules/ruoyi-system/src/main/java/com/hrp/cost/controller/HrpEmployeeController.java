@@ -3,6 +3,7 @@ package com.hrp.cost.controller;
 import com.hrp.cost.api.domain.HrpEmployee;
 import com.hrp.cost.service.IHrpEmployeeService;
 import com.hrp.cost.service.IHospitalDeptService;
+import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
@@ -39,10 +40,24 @@ public class HrpEmployeeController extends BaseController
      * 查询职工信息列表
      */
     @RequiresPermissions("hrp:employee:list")
-    @GetMapping("/list")
-    public TableDataInfo list(HrpEmployee employee)
+    @PostMapping("/list")
+    public TableDataInfo list(@RequestBody HrpEmployee employee)
     {
-        startPage();
+        // 从实体对象的params Map中获取分页参数
+        if (employee.getParams() != null) {
+            Integer pageNum = (Integer) employee.getParams().get("pageNum");
+            Integer pageSize = (Integer) employee.getParams().get("pageSize");
+            
+            // 如果params中有分页参数，手动启动分页
+            if (pageNum != null && pageSize != null) {
+                PageHelper.startPage(pageNum, pageSize);
+            } else {
+                startPage(); // 使用默认方式（从请求参数中获取）
+            }
+        } else {
+            startPage(); // 使用默认方式
+        }
+        
         List<HrpEmployee> list = employeeService.selectEmployeeList(employee);
         return getDataTable(list);
     }

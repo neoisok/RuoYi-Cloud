@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <id     property="zggh"       column="ZGGH"      />
         <result property="zgdm"       column="ZGDM"      />
         <result property="ksdm"       column="KSDM"      />
+        <result property="ksmc"       column="KSMC"      />
         <result property="zgxms"      column="ZGXM"      />
         <result property="xb"         column="XB"        />
         <result property="csrq"       column="CSRQ"      />
@@ -39,58 +40,68 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectEmployeeList" parameterType="com.hrp.cost.api.domain.HrpEmployee" resultMap="HrpEmployeeResult">
-        <include refid="selectEmployeeVo"/>
+        select e.ZGGH, e.ZGDM, e.KSDM, d.MC as KSMC, e.ZGXM, e.XB, e.CSRQ, e.SFZ, e.DZ, e.DHHM, e.SJHM, 
+               e.YHKH1, e.SRM1, e.SRM2, e.SRM3, e.ZW, e.ZC, e.DQZT, e.BZ, e.ZGKL, e.SYFW, e.JJKS, 
+               e.ZGLB, e.ZGXZ, e.CBXS, e.RYXZ
+        from RSGL_ZGXX e
+        left join CBGL_KSDM d on e.KSDM = d.DM
         <where>
             <if test="zggh != null and zggh != ''">
-                AND ZGGH = #{zggh}
+                AND e.ZGGH = #{zggh}
             </if>
             <if test="zgdm != null and zgdm != ''">
-                AND ZGDM = #{zgdm}
+                AND e.ZGDM = #{zgdm}
+            </if>
+            <if test="ksdmList != null and ksdmList.size() > 0">
+                AND e.KSDM IN
+                <foreach collection="ksdmList" item="ksdm" open="(" separator="," close=")">
+                    #{ksdm}
+                </foreach>
             </if>
             <if test="ksdm != null and ksdm != ''">
-                AND KSDM = #{ksdm}
+                AND e.KSDM = #{ksdm}
             </if>
             <if test="zgxms != null and zgxms != ''">
-                AND ZGXM like concat('%', #{zgxms}, '%')
+                AND e.ZGXM like concat('%', #{zgxms}, '%')
             </if>
             <if test="xb != null and xb != ''">
-                AND XB = #{xb}
+                AND e.XB = #{xb}
             </if>
             <if test="sfz != null and sfz != ''">
-                AND SFZ = #{sfz}
+                AND e.SFZ = #{sfz}
             </if>
             <if test="sjhm != null and sjhm != ''">
-                AND SJHM = #{sjhm}
+                AND e.SJHM = #{sjhm}
             </if>
             <if test="dhhm != null and dhhm != ''">
-                AND DHHM = #{dhhm}
+                AND e.DHHM = #{dhhm}
             </if>
             <if test="zw != null and zw != ''">
-                AND ZW = #{zw}
+                AND e.ZW = #{zw}
             </if>
             <if test="zc != null and zc != ''">
-                AND ZC = #{zc}
+                AND e.ZC = #{zc}
             </if>
             <if test="dqzt != null and dqzt != ''">
-                AND DQZT = #{dqzt}
+                AND e.DQZT = #{dqzt}
             </if>
             <if test="zgkl != null and zgkl != ''">
-                AND ZGKL = #{zgkl}
+                AND e.ZGKL = #{zgkl}
             </if>
             <if test="syfw != null">
-                AND SYFW = #{syfw}
+                AND e.SYFW = #{syfw}
             </if>
             <if test="zglb != null and zglb != ''">
-                AND ZGLB = #{zglb}
+                AND e.ZGLB = #{zglb}
             </if>
             <if test="zgxz != null and zgxz != ''">
-                AND ZGXZ = #{zgxz}
+                AND e.ZGXZ = #{zgxz}
             </if>
             <if test="ryxz != null and ryxz != ''">
-                AND RYXZ = #{ryxz}
+                AND e.RYXZ = #{ryxz}
             </if>
         </where>
-        order by ZGGH
+        order by e.ZGGH
     </select>
 
     <select id="selectEmployeeById" parameterType="String" resultMap="HrpEmployeeResult">
